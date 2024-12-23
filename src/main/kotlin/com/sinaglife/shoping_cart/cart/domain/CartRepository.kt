@@ -4,6 +4,6 @@ import com.sinaglife.shoping_cart.shared.domain.critreria.Criteria
 
 interface CartRepository {
     fun updateOne(cart: Cart)
-    fun findByCustomerId(customerId: CartCustomerId): Cart?
-    fun findMany(criteria: Criteria?): MutableList<Cart>
+    fun findByCriteria(criteria: Criteria?): MutableList<Cart>
+    fun save(cart: Cart)
 }
