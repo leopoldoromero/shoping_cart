@@ -1,6 +1,7 @@
 package com.sinaglife.shoping_cart.cart.infrastructure.persistance.mysql
 
 import com.sinaglife.shoping_cart.cart.domain.Cart
+import com.sinaglife.shoping_cart.cart.domain.CartId
 import com.sinaglife.shoping_cart.cart.domain.CartPrimitives
 import com.sinaglife.shoping_cart.cart.domain.CartRepository
 import com.sinaglife.shoping_cart.cart.domain.cart_item.CartItemPrimitives
@@ -21,6 +22,10 @@ class CartMysqlRepository(
     override fun save(cart: Cart) {
         val userEntity = CartDbEntity.fromDomainEntity(cart)
         repository.save(userEntity)
+    }
+
+    override fun find(id: CartId): Cart? {
+        TODO("Not yet implemented")
     }
 
     override fun findByCriteria(criteria: Criteria?): MutableList<Cart> {
