@@ -15,4 +15,8 @@ class CartItemId(val value: UUID) {
             return CartItemId(UUID.randomUUID())
         }
     }
+
+    fun equals(id: CartItemId): Boolean {
+        return value.equals(id.value)
+    }
 }

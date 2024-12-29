@@ -8,7 +8,9 @@ import java.time.LocalDateTime
 class CartCreatedDomainEvent(
     val id: String,
     val items: List<CartItemPrimitives>,
-    val discount: CartDiscountPrimitives?,
+    val subTotal: Int,
+    val total: Int,
+    val discount: Int?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val customerId: String?,

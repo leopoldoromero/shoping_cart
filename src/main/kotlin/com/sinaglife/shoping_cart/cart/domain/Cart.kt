@@ -49,7 +49,9 @@ class Cart private constructor(
             cart.record(CartCreatedDomainEvent(
                 id = cart.id.value.toString(),
                 items = cart.items.map { item -> item.toPrimitives() },
-                discount = cart.discount?.let { it -> it.toPrimitives() },
+                subTotal = cart.subTotal(),
+                total = cart.total(),
+                discount = cart.discountAmount(),
                 createdAt = cart.createdAt,
                 updatedAt = cart.updatedAt,
                 customerId = cart.customerId?.let { it -> it.value.toString() }
@@ -81,6 +83,53 @@ class Cart private constructor(
             customerId?.let { it.toString() }
         )
     }
+
+    fun addItem(item: CartItem) {
+        val existingItem = items.find { it.id.equals(item.id) }
+
+        if (existingItem == null) {
+            items.add(item)
+        } else {
+            items.replaceAll { currentItem ->
+                if (currentItem.id.equals(existingItem.id)) {
+                    CartItem.create(
+                        id = existingItem.id,
+                        quantity = CartItemQty(existingItem.quantity.value + item.quantity.value),
+                        price = existingItem.price
+                    )
+                } else {
+                    currentItem
+                }
+            }
+        }
+    }
+
+    fun removeItem(item: CartItem) {
+        val existingItem = items.find { it.id.equals(item.id) }
+
+        if (existingItem == null) {
+            return
+        }
+
+        val currentQty = existingItem.quantity.value
+        val quantityDiff = currentQty - item.quantity.value
+        if (quantityDiff <= 0) {
+            items.remove(item)
+        } else {
+            items.replaceAll { currentItem ->
+                if (currentItem.id.equals(existingItem.id)) {
+                    CartItem.create(
+                        id = existingItem.id,
+                        quantity = CartItemQty(existingItem.quantity.value - item.quantity.value),
+                        price = existingItem.price
+                    )
+                } else {
+                    currentItem
+                }
+            }
+        }
+    }
+
 
     fun subTotal(): Int {
         return items.sumOf { it -> it.total().value }
