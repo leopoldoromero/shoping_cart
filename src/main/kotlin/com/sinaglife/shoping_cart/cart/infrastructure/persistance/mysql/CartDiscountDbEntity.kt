@@ -1,6 +1,6 @@
 package com.sinaglife.shoping_cart.cart.infrastructure.persistance.mysql
 
-import com.sinaglife.shoping_cart.cart.domain.discount.Discount
+import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscount
 import jakarta.persistence.*
 
 @Entity
@@ -27,7 +27,7 @@ class CartDiscountDbEntity(
     val cart: CartDbEntity? = null
 ) {
     companion object {
-        fun fromDomainEntity(discount: Discount): CartDiscountDbEntity {
+        fun fromDomainEntity(discount: CartDiscount): CartDiscountDbEntity {
             return CartDiscountDbEntity(
                 id = discount.id.toString(),
                 amount = discount.amount.value,

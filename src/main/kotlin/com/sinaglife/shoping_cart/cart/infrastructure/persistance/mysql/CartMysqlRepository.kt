@@ -55,12 +55,8 @@ class CartMysqlRepository(
                         if (entityItems.isNotEmpty()) {
                             entityItems.map { item -> CartItemPrimitives(
                                 id = item.id,
-                                name = item.name,
                                 quantity = item.quantity,
-                                stock = item.stock,
                                 price = item.price,
-                                code = item.code,
-                                image = item.image,
                             ) }.toMutableList()
                         } else {
                             mutableListOf()

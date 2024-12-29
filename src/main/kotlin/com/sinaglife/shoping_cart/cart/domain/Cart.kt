@@ -1,8 +1,9 @@
 package com.sinaglife.shoping_cart.cart.domain
 
 import com.sinaglife.shoping_cart.cart.domain.cart_item.*
-import com.sinaglife.shoping_cart.cart.domain.discount.Discount
-import com.sinaglife.shoping_cart.cart.domain.discount.DiscountPrimitives
+import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscount
+import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountPrimitives
+import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountTypes
 import com.sinaglife.shoping_cart.cart.domain.events.CartCreatedDomainEvent
 import com.sinaglife.shoping_cart.shared.domain.AggregateRoot
 import com.sinaglife.shoping_cart.shared.domain.Guard
@@ -11,7 +12,7 @@ import java.time.LocalDateTime
 data class CartPrimitives(
     val id: String,
     val items: MutableList<CartItemPrimitives>,
-    val discount: DiscountPrimitives?,
+    val discount: CartDiscountPrimitives?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val customerId: String?,
@@ -20,7 +21,7 @@ data class CartPrimitives(
 class Cart private constructor(
     val id: CartId,
     val items: MutableList<CartItem>,
-    val discount: Discount?,
+    val discount: CartDiscount?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val customerId: CartCustomerId?,
@@ -29,7 +30,7 @@ class Cart private constructor(
         fun create(
             id: CartId?,
             items: MutableList<CartItem>,
-            discount: Discount?,
+            discount: CartDiscount?,
             customerId: CartCustomerId?
         ): Cart {
             Guard.validateAgainstNullOrUndefined(
@@ -62,7 +63,7 @@ class Cart private constructor(
             return Cart(
                 CartId.fromString(props.id),
                 props.items.map { item -> CartItem.fromPrimitives(item) }.toMutableList(),
-                props.discount?.let { Discount.fromPrimitives(it) },
+                props.discount?.let { CartDiscount.fromPrimitives(it) },
                 props.createdAt,
                 props.updatedAt,
                 props.customerId?.let { CartCustomerId.fromString(it) }
@@ -79,6 +80,23 @@ class Cart private constructor(
             updatedAt,
             customerId?.let { it.toString() }
         )
+    }
+
+    fun subTotal(): Int {
+        return items.sumOf { it -> it.total().value }
+    }
+
+    fun discountAmount(): Int {
+        return discount?.let {
+            when (it.type.value) {
+                CartDiscountTypes.FIXED -> it.amount.value
+                CartDiscountTypes.PERCENT -> (subTotal() * it.amount.value / 100)
+            }
+        } ?: 0
+    }
+
+    fun total(): Int {
+        return subTotal() - discountAmount()
     }
 
 }
