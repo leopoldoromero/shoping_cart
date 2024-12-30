@@ -4,7 +4,7 @@ import com.sinaglife.shoping_cart.read_model.domain.CartItemReadModel
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
-@Document
+@Document(collection = "cart")
 class CartReadModelDbDocument(
     val id: String,
     val items: List<CartItemReadModel>,

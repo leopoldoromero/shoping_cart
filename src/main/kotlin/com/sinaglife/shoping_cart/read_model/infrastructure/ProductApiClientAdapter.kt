@@ -16,7 +16,7 @@ class ProductApiClientAdapter(
         return webClientBuilder.baseUrl(baseUrl)
             .build()
             .get()
-            .uri("/api/v1/products/{id}", productId)
+            .uri("/v2/products/{id}", productId)
             .retrieve()
             .bodyToMono(ProductDto::class.java)
             .block()  // Blocking here to convert Mono<ProductDto> to ProductDto
