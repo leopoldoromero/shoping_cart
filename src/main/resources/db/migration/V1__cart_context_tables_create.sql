@@ -11,7 +11,7 @@ CREATE TABLE cart_item (
     quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
     cart_id VARCHAR(45),
-    FOREIGN KEY (cart_id) REFERENCES cart (id)
+    FOREIGN KEY (cart_id) REFERENCES cart (id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart_discount (
@@ -21,5 +21,5 @@ type VARCHAR(255),
 individualUse BOOLEAN,
 code VARCHAR(255),
 cart_id VARCHAR(45),
-FOREIGN KEY (cart_id) REFERENCES cart (id)
+FOREIGN KEY (cart_id) REFERENCES cart (id) ON DELETE CASCADE
 );
