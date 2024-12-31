@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 @DomainEventSubscriber([CartCreatedDomainEvent::class])
-class CartReadModelProjector(
+class CreateAfterCartCreatedDomainEventSubscriber(
     private val productApiClient: ProductApiClient,
     @Qualifier("CartReadModelMongoRepository")
     private val repository: CartReadRepository,

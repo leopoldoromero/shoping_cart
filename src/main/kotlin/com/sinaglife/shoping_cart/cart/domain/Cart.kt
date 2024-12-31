@@ -4,7 +4,9 @@ import com.sinaglife.shoping_cart.cart.domain.cart_item.*
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscount
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountPrimitives
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountTypes
+import com.sinaglife.shoping_cart.cart.domain.errors.UnsupportedCartUpdateActionError
 import com.sinaglife.shoping_cart.cart.domain.events.CartCreatedDomainEvent
+import com.sinaglife.shoping_cart.cart.domain.events.CartUpdatedDomainEvent
 import com.sinaglife.shoping_cart.shared.domain.AggregateRoot
 import com.sinaglife.shoping_cart.shared.domain.Guard
 import java.time.LocalDateTime
@@ -130,6 +132,24 @@ class Cart private constructor(
         }
     }
 
+    fun updateItem(item: CartItem, action: CartUpdateAction) {
+        when(action) {
+            CartUpdateAction.ADD -> addItem(item)
+            CartUpdateAction.REMOVE -> removeItem(item)
+            else -> throw UnsupportedCartUpdateActionError(action.toString())
+        }
+        record(CartUpdatedDomainEvent(
+            id = id.value.toString(),
+            items = items.map { item -> item.toPrimitives() },
+            subTotal = subTotal(),
+            total = total(),
+            discount = discountAmount(),
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            customerId = customerId?.let { it -> it.value.toString() },
+            action = action.toString()
+        ))
+    }
 
     fun subTotal(): Int {
         return items.sumOf { it -> it.total().value }
@@ -146,6 +166,10 @@ class Cart private constructor(
 
     fun total(): Int {
         return subTotal() - discountAmount()
+    }
+
+    fun isEmpty(): Boolean {
+        return items.isEmpty()
     }
 
 }

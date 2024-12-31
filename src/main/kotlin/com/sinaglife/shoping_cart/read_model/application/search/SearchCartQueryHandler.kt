@@ -1,6 +1,6 @@
 package com.sinaglife.shoping_cart.read_model.application.search
 
-import com.sinaglife.shoping_cart.read_model.domain.errors.CartDoesNotExistError
+import com.sinaglife.shoping_cart.shared.errors.CartDoesNotExistError
 import com.sinaglife.shoping_cart.shared.domain.bus.query.QueryHandler
 import org.springframework.stereotype.Service
 

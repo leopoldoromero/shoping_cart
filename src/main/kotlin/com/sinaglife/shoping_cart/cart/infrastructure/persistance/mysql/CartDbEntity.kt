@@ -28,15 +28,30 @@ class CartDbEntity(
 ) {
     companion object {
         fun fromDomainEntity(cart: Cart): CartDbEntity {
+            var dbEntity = CartDbEntity(
+                id = cart.id.value.toString(),
+                discount = null,
+                items = emptyList(),
+                createdAt = cart.createdAt,
+                updatedAt = cart.updatedAt,
+                customerId = cart.customerId.toString(),
+            )
             val items: List<CartItemDbEntity> = cart.items.let { entityItems ->
                 if (entityItems.isNotEmpty()) {
-                    entityItems.map { item -> CartItemDbEntity.fromDomainEntity(item)
+                    entityItems.map { item ->
+                        var partial = CartItemDbEntity.fromDomainEntity(item)
+                        partial.cart = dbEntity
+                        partial
                     }
                 } else {
                     emptyList()
                 }
             }
-            val discount = cart.discount?.let { CartDiscountDbEntity.fromDomainEntity(it) }
+            val discount = cart.discount?.let { it ->
+                val partial = CartDiscountDbEntity.fromDomainEntity(it)
+                partial.cart = dbEntity
+                partial
+            }
             return CartDbEntity(
                 id = cart.id.value.toString(),
                 discount = discount,

@@ -1,4 +1,4 @@
-package com.sinaglife.shoping_cart.cart.domain.commands
+package com.sinaglife.shoping_cart.cart.application.create
 
 import com.sinaglife.shoping_cart.cart.domain.cart_item.CartItemPrimitives
 import com.sinaglife.shoping_cart.shared.domain.bus.command.Command

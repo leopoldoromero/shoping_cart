@@ -1,53 +1,45 @@
 package com.sinaglife.shoping_cart.cart.infrastructure.controllers
 
+import com.sinaglife.shoping_cart.cart.application.update.CartUpdateCommand
+import com.sinaglife.shoping_cart.cart.domain.CartUpdateAction
 import com.sinaglife.shoping_cart.cart.domain.cart_item.CartItemPrimitives
-import com.sinaglife.shoping_cart.cart.application.create.CreateCartCommand
 import com.sinaglife.shoping_cart.shared.domain.bus.command.CommandBus
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-data class CartItemRequest(
+data class UpdateCartItemRequest(
     val id: String,
-    val quantity: Int,
-    val price: Int,
+    val item: CartItemPrimitives,
+    val action: CartUpdateAction
 )
-data class CreateCartRequest(
-    val id: String,
-    val items: List<CartItemRequest>,
-    val customerId: String?
-)
-data class CreateCartResponse(val success: Boolean, val message: String)
+data class UpdateCartItemResponse(val success: Boolean, val message: String)
 
 @RestController
-class PostCreateCartController(private val commandBus: CommandBus) {
+class PutCartItemController(private val commandBus: CommandBus) {
 
-    @PostMapping("/api/v1/carts")
-    fun run(@RequestBody body: CreateCartRequest): ResponseEntity<CreateCartResponse> {
+    @PutMapping("/api/v1/carts/items")
+    fun run(@RequestBody body: UpdateCartItemRequest): ResponseEntity<UpdateCartItemResponse> {
         return try {
-            val items = body.items.map { item -> CartItemPrimitives(
-                id = item.id,
-                price = item.price,
-                quantity = item.quantity,
-            )}
             commandBus.dispatch(
-                CreateCartCommand(
+                CartUpdateCommand(
                     id = body.id,
-                    items = items,
-                    customerId = body.customerId,
+                    item = body.item,
+                    action = body.action,
                 )
             )
             ResponseEntity.status(HttpStatus.CREATED).body(
-                CreateCartResponse(
+                UpdateCartItemResponse(
                     success = true,
                     message = "Operation success",
                 )
             )
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                CreateCartResponse(
+                UpdateCartItemResponse(
                     success = false,
                     message = e.message ?: "Unhandled error",
                 )

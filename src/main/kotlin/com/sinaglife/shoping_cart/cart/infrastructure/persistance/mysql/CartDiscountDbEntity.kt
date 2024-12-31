@@ -24,7 +24,7 @@ class CartDiscountDbEntity(
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
-    val cart: CartDbEntity? = null
+    var cart: CartDbEntity? = null
 ) {
     companion object {
         fun fromDomainEntity(discount: CartDiscount): CartDiscountDbEntity {
