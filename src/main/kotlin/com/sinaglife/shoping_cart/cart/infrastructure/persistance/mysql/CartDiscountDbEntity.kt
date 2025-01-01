@@ -22,18 +22,18 @@ class CartDiscountDbEntity(
     @Column(name = "code")
     val code: String,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    var cart: CartDbEntity? = null
-) {
+    @Column(name = "cartId")
+    val cartId: String,
+    ) {
     companion object {
-        fun fromDomainEntity(discount: CartDiscount): CartDiscountDbEntity {
+        fun fromDomainEntity(discount: CartDiscount, cartId: String): CartDiscountDbEntity {
             return CartDiscountDbEntity(
                 id = discount.id.toString(),
                 amount = discount.amount.value,
                 type = discount.type.value.toString(),
                 individualUse = discount.individualUse,
                 code = discount.code.value,
+                cartId = cartId,
             )
         }
     }

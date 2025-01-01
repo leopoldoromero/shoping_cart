@@ -4,7 +4,7 @@ import com.sinaglife.shoping_cart.cart.domain.cart_item.CartItem
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "cart_item")
+@Table(name = "cart_items")
 class CartItemDbEntity(
     @Id
     @Column(name = "id")
@@ -16,16 +16,16 @@ class CartItemDbEntity(
     @Column(name = "price")
     val price: Int,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    var cart: CartDbEntity? = null
+    @Column(name = "cartId")
+    val cartId: String,
 ) {
     companion object {
-        fun fromDomainEntity(item: CartItem): CartItemDbEntity {
+        fun fromDomainEntity(item: CartItem, cartId: String): CartItemDbEntity {
             return CartItemDbEntity(
                 id = item.id.value.toString(),
                 quantity = item.quantity.value,
                 price = item.price.value,
+                cartId = cartId,
             )
         }
     }

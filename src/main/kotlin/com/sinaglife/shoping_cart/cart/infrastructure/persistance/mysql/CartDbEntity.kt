@@ -5,16 +5,18 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "cart")
+@Table(name = "carts")
 class CartDbEntity(
     @Id
     @Column(name = "id", nullable = false, updatable = false)
     val id: String,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val items: List<CartItemDbEntity>,
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(name="id")
+    val items: List<CartItemDbEntity> = emptyList(),
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id")
     val discount: CartDiscountDbEntity? = null,
 
     @Column(name = "createdAt")
@@ -28,30 +30,16 @@ class CartDbEntity(
 ) {
     companion object {
         fun fromDomainEntity(cart: Cart): CartDbEntity {
-            var dbEntity = CartDbEntity(
-                id = cart.id.value.toString(),
-                discount = null,
-                items = emptyList(),
-                createdAt = cart.createdAt,
-                updatedAt = cart.updatedAt,
-                customerId = cart.customerId.toString(),
-            )
             val items: List<CartItemDbEntity> = cart.items.let { entityItems ->
                 if (entityItems.isNotEmpty()) {
                     entityItems.map { item ->
-                        var partial = CartItemDbEntity.fromDomainEntity(item)
-                        partial.cart = dbEntity
-                        partial
+                        CartItemDbEntity.fromDomainEntity(item, cart.id.value.toString())
                     }
                 } else {
                     emptyList()
                 }
             }
-            val discount = cart.discount?.let { it ->
-                val partial = CartDiscountDbEntity.fromDomainEntity(it)
-                partial.cart = dbEntity
-                partial
-            }
+            val discount = cart.discount?.let { CartDiscountDbEntity.fromDomainEntity(it, cart.id.value.toString()) }
             return CartDbEntity(
                 id = cart.id.value.toString(),
                 discount = discount,
