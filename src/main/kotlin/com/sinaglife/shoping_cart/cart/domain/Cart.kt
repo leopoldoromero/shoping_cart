@@ -171,5 +171,4 @@ class Cart private constructor(
     fun isEmpty(): Boolean {
         return items.isEmpty()
     }
-
 }
