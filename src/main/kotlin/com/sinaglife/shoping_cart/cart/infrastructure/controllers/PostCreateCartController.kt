@@ -24,7 +24,7 @@ data class CreateCartResponse(val success: Boolean, val message: String)
 @RestController
 class PostCreateCartController(private val commandBus: CommandBus) {
 
-    @PostMapping("/api/v1/carts")
+    @PostMapping("/api/v2/carts")
     fun run(@RequestBody body: CreateCartRequest): ResponseEntity<CreateCartResponse> {
         return try {
             val items = body.items.map { item -> CartItemPrimitives(
@@ -49,7 +49,7 @@ class PostCreateCartController(private val commandBus: CommandBus) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 CreateCartResponse(
                     success = false,
-                    message = e.message ?: "Unhandled error",
+                    message = e.cause?.message ?: e.message ?: "Unhandled error",
                 )
             )
         }

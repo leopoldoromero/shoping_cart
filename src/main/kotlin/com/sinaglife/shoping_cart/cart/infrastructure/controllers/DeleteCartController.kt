@@ -13,7 +13,7 @@ data class DeleteCartResponse(val success: Boolean, val message: String)
 @RestController
 class DeleteCartController(private val commandBus: CommandBus) {
 
-    @DeleteMapping("/api/v1/carts/{id}")
+    @DeleteMapping("/api/v2/carts/{id}")
     fun run(@PathVariable id: String): ResponseEntity<DeleteCartResponse> {
         return try {
             commandBus.dispatch(DeleteCartCommand(id))
@@ -27,7 +27,7 @@ class DeleteCartController(private val commandBus: CommandBus) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 DeleteCartResponse(
                     success = false,
-                    message = e.message ?: "Unhandled error",
+                    message = e.cause?.message ?: e.message ?: "Unhandled error",
                 )
             )
         }

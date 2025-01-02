@@ -21,7 +21,7 @@ data class UpdateCartItemResponse(val success: Boolean, val message: String)
 @RestController
 class PutCartItemController(private val commandBus: CommandBus) {
 
-    @PutMapping("/api/v1/carts/items")
+    @PutMapping("/api/v2/carts/items")
     fun run(@RequestBody body: UpdateCartItemRequest): ResponseEntity<UpdateCartItemResponse> {
         return try {
             commandBus.dispatch(
@@ -41,7 +41,7 @@ class PutCartItemController(private val commandBus: CommandBus) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 UpdateCartItemResponse(
                     success = false,
-                    message = e.message ?: "Unhandled error",
+                    message = e.cause?.message ?: e.message ?: "Unhandled error",
                 )
             )
         }

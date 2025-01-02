@@ -28,7 +28,7 @@ data class GetCartErrorResponse(
 @RestController
 class GetCartController(private val queryBus: QueryBus) {
 
-    @GetMapping("/api/v1/carts/{id}")
+    @GetMapping("/api/v2/carts/{id}")
     fun run(@PathVariable id: String): ResponseEntity<*> {
        return try {
            val cart = queryBus.ask(

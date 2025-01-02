@@ -24,7 +24,8 @@ class SecurityConfig {
             .authorizeHttpRequests { authorize: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry ->
                 authorize
                     // TODO: allow all request while the security strategy its done
-                    .requestMatchers("/api/v1/**").permitAll()
+                    // .antMatchers("/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/api/v2/**").permitAll()
                     .anyRequest().permitAll()
             }
 //            .authenticationManager { auth ->
