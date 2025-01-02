@@ -11,12 +11,11 @@ class CartDbEntity(
     @Column(name = "id", nullable = false, updatable = false)
     val id: String,
 
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @JoinColumn(name="id")
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "cartId")
     val items: List<CartItemDbEntity> = emptyList(),
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "cartId")
     val discount: CartDiscountDbEntity? = null,
 
     @Column(name = "createdAt")
@@ -26,7 +25,7 @@ class CartDbEntity(
     val updatedAt: LocalDateTime,
 
     @Column(name = "customerId")
-    val customerId: String,
+    val customerId: String? = null,
 ) {
     companion object {
         fun fromDomainEntity(cart: Cart): CartDbEntity {
@@ -46,7 +45,7 @@ class CartDbEntity(
                 items = items,
                 createdAt = cart.createdAt,
                 updatedAt = cart.updatedAt,
-                customerId = cart.customerId.toString(),
+                customerId = cart.customerId?.let { it -> it.value.toString() },
             )
         }
     }
