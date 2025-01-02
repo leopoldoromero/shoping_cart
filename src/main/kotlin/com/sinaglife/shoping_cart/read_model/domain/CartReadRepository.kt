@@ -7,4 +7,5 @@ interface CartReadRepository {
     fun find(id: String): CartReadModel?
     fun findByCriteria(criteria: Criteria?): MutableList<CartReadModel>
     fun updateOne(cart: CartReadModel)
+    fun deleteCart(id: String)
 }

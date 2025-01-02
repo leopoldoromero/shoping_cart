@@ -6,6 +6,7 @@ import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountPrimitiv
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountTypes
 import com.sinaglife.shoping_cart.cart.domain.errors.UnsupportedCartUpdateActionError
 import com.sinaglife.shoping_cart.cart.domain.events.CartCreatedDomainEvent
+import com.sinaglife.shoping_cart.cart.domain.events.CartDeletedDomainEvent
 import com.sinaglife.shoping_cart.cart.domain.events.CartUpdatedDomainEvent
 import com.sinaglife.shoping_cart.shared.domain.AggregateRoot
 import com.sinaglife.shoping_cart.shared.domain.Guard
@@ -170,5 +171,9 @@ class Cart private constructor(
 
     fun isEmpty(): Boolean {
         return items.isEmpty()
+    }
+
+    fun remove() {
+        record(CartDeletedDomainEvent(id.value.toString()))
     }
 }

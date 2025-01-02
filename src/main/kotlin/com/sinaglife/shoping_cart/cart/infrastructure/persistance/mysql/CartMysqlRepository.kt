@@ -117,4 +117,8 @@ class CartMysqlRepository(
     override fun updateOne(cart: Cart) {
         client.save(CartDbEntity.fromDomainEntity(cart))
     }
+
+    override fun deleteCart(cartId: CartId) {
+        client.deleteById(cartId.value.toString())
+    }
 }

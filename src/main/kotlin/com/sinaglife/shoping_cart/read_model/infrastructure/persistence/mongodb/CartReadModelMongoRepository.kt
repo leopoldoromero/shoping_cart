@@ -45,4 +45,8 @@ class CartReadModelMongoRepository(private val client: CartReadModelMongoClientR
     override fun updateOne(cart: CartReadModel) {
         TODO("Not yet implemented")
     }
+
+    override fun deleteCart(id: String) {
+        client.deleteById(id)
+    }
 }

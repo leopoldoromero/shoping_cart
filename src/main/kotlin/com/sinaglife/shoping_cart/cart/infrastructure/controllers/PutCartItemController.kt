@@ -31,7 +31,7 @@ class PutCartItemController(private val commandBus: CommandBus) {
                     action = body.action,
                 )
             )
-            ResponseEntity.status(HttpStatus.CREATED).body(
+            ResponseEntity.status(HttpStatus.OK).body(
                 UpdateCartItemResponse(
                     success = true,
                     message = "Operation success",
