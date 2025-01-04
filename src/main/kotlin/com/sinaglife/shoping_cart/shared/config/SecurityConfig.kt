@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -24,7 +25,7 @@ class SecurityConfig {
             .authorizeHttpRequests { authorize: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry ->
                 authorize
                     // TODO: allow all request while the security strategy its done
-                    // .antMatchers("/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                    // .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").authenticated()
                     .requestMatchers("/api/v2/**").permitAll()
                     .anyRequest().permitAll()
             }
@@ -44,6 +45,7 @@ class SecurityConfig {
                 header.frameOptions { frameOption -> frameOption.disable() }
             }
             .csrf { it -> it.disable() }
+            // .httpBasic { it -> it.authenticationEntryPoint(AuthenticationEntryPoint()) }
 
         return http.build()
     }
