@@ -5,6 +5,7 @@ import com.sinaglife.shoping_cart.read_model.infrastructure.controllers.GetCartE
 import com.sinaglife.shoping_cart.read_model.infrastructure.controllers.GetCartResponse
 import com.sinaglife.shoping_cart.shared.domain.bus.command.CommandBus
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -21,6 +22,14 @@ class DeleteCartController(private val commandBus: CommandBus) {
     @Operation(
         summary = "Delete a cart by its ID",
         description = "Delete the shopping cart by providing its unique identifier.",
+        parameters = [
+            Parameter(
+                name = "id",
+                description = "The unique identifier of the shopping cart.",
+                required = true,
+                example = "1bf12867-3cc7-4db9-b5be-abb1ba1c4c57"
+            )
+        ],
         responses = [
             ApiResponse(
                 responseCode = "200",

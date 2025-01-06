@@ -19,7 +19,7 @@ class PostCreateCartController(private val commandBus: CommandBus) {
 
     @Operation(
         summary = "Create a cart",
-        description = "Create a cart by providing its id and items",
+        description = "Create a cart providing its id and items",
         requestBody = RequestBody(
             description = "Cart creation request body",
             required = true,

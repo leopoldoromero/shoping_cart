@@ -5,6 +5,7 @@ import com.sinaglife.shoping_cart.read_model.application.search.SearchCartQueryR
 import com.sinaglife.shoping_cart.shared.domain.bus.query.QueryBus
 import com.sinaglife.shoping_cart.shared.errors.CartDoesNotExistError
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
@@ -25,6 +26,14 @@ class GetCartController(private val queryBus: QueryBus) {
     @Operation(
         summary = "Retrieve a cart by its ID",
         description = "Fetch the details of a shopping cart by providing its unique identifier.",
+        parameters = [
+            Parameter(
+                name = "id",
+                description = "The unique identifier of the shopping cart.",
+                required = true,
+                example = "1bf12867-3cc7-4db9-b5be-abb1ba1c4c57"
+            )
+        ],
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -79,6 +88,26 @@ class GetCartController(private val queryBus: QueryBus) {
                                 value = """
                                     {
                                         "error": "Cart does not exist"
+                                    }
+                                """
+                            )
+                        ]
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Invalid request, internal server error",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetCartErrorResponse::class),
+                        examples = [
+                            ExampleObject(
+                                name = "Error Response",
+                                value = """
+                                    {
+                                        "error": "Internal server error"
                                     }
                                 """
                             )
