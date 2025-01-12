@@ -3,7 +3,6 @@ package com.sinaglife.shoping_cart.cart.domain
 import com.sinaglife.shoping_cart.cart.domain.cart_item.*
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscount
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountPrimitives
-import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountTypes
 import com.sinaglife.shoping_cart.cart.domain.errors.UnsupportedCartUpdateActionError
 import com.sinaglife.shoping_cart.cart.domain.events.CartCreatedDomainEvent
 import com.sinaglife.shoping_cart.cart.domain.events.CartDeletedDomainEvent
@@ -152,20 +151,17 @@ class Cart private constructor(
         ))
     }
 
-    fun subTotal(): Int {
+    fun subTotal(): Double {
         return items.sumOf { it -> it.total().value }
     }
 
-    fun discountAmount(): Int {
+    fun discountAmount(): Double {
         return discount?.let {
-            when (it.type.value) {
-                CartDiscountTypes.FIXED -> it.amount.value
-                CartDiscountTypes.PERCENT -> (subTotal() * it.amount.value / 100)
-            }
-        } ?: 0
+            it.amount.value
+        } ?: 0.00
     }
 
-    fun total(): Int {
+    fun total(): Double {
         return subTotal() - discountAmount()
     }
 

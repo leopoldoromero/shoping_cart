@@ -5,7 +5,7 @@ import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscount
 interface DiscountApiClient {
     fun getDiscount(
         code: String,
-        subTotal: Int,
+        subTotal: Double,
         customerId: String?
     ): CartDiscount
 }

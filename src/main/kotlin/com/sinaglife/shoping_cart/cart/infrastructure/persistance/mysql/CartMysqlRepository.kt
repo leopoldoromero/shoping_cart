@@ -6,15 +6,12 @@ import com.sinaglife.shoping_cart.cart.domain.CartPrimitives
 import com.sinaglife.shoping_cart.cart.domain.CartRepository
 import com.sinaglife.shoping_cart.cart.domain.cart_discount.CartDiscountPrimitives
 import com.sinaglife.shoping_cart.cart.domain.cart_item.CartItemPrimitives
-import com.sinaglife.shoping_cart.read_model.domain.CartReadModel
 import com.sinaglife.shoping_cart.shared.domain.critreria.Criteria
 import com.sinaglife.shoping_cart.shared.infrastructure.persistance.mysql.MysqlDbQueryBuilder
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
-import jakarta.persistence.criteria.JoinType
 import jakarta.persistence.criteria.Root
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository(value = "CartMysqlRepository")
@@ -34,9 +31,6 @@ class CartMysqlRepository(
 
         val root: Root<CartDbEntity> = cq.from(CartDbEntity::class.java)
 
-        val itemsJoin = root.join<CartDbEntity, CartItemDbEntity>("items", JoinType.LEFT)
-        val discountJoin = root.join<CartDbEntity, CartDiscountDbEntity>("discount", JoinType.LEFT)
-
         cq.where(cb.equal(root.get<String>("id"), id.value.toString()))
 
         val query = em.createQuery(cq)
@@ -50,7 +44,6 @@ class CartMysqlRepository(
             ) }.toMutableList(),
             discount = dbEntity.discount?.let { it -> CartDiscountPrimitives(
                 id = it.id,
-                type = it.type,
                 code = it.code,
                 amount = it.amount,
                 individualUse = it.individualUse,

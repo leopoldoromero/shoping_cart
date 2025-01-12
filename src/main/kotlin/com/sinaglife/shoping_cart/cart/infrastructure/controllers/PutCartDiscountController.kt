@@ -15,7 +15,7 @@ class PutCartDiscountController(private val commandBus: CommandBus) {
     fun run(@RequestBody body: AddDiscountToCartRequest): ResponseEntity<CartWriteResponse> {
         return try {
             commandBus.dispatch(
-                AddDiscountToCartCommand(id = body.id, code = body.code)
+                AddDiscountToCartCommand(cartId = body.cartId, code = body.code)
             )
             ResponseEntity.status(HttpStatus.OK).body(
                 CartWriteResponse(

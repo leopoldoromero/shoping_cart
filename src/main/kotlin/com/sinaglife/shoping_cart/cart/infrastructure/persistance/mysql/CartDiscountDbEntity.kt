@@ -11,10 +11,7 @@ class CartDiscountDbEntity(
     val id: String,
 
     @Column(name = "amount")
-    val amount: Int,
-
-    @Column(name = "type")
-    val type: String,
+    val amount: Double,
 
     @Column(name = "individualUse")
     val individualUse: Boolean,
@@ -30,7 +27,6 @@ class CartDiscountDbEntity(
             return CartDiscountDbEntity(
                 id = discount.id.toString(),
                 amount = discount.amount.value,
-                type = discount.type.value.toString(),
                 individualUse = discount.individualUse,
                 code = discount.code.value,
                 cartId = cartId,

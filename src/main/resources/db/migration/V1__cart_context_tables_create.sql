@@ -9,7 +9,7 @@ CREATE TABLE carts (
 CREATE TABLE cart_items (
     id CHAR(36) NOT NULL,
     quantity INTEGER NOT NULL,
-    price INTEGER NOT NULL,
+    price DOUBLE  NOT NULL,
     cartId CHAR(36),
     PRIMARY KEY (id),
     FOREIGN KEY (cartId) REFERENCES carts (id) ON DELETE CASCADE,
@@ -18,8 +18,7 @@ CREATE TABLE cart_items (
 
 CREATE TABLE cart_discount (
     id CHAR(36) NOT NULL,
-    amount INTEGER NOT NULL,
-    type VARCHAR(255),
+    amount DOUBLE  NOT NULL,
     individualUse BOOLEAN,
     code VARCHAR(255),
     cartId CHAR(36),

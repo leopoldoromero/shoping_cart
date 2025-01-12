@@ -5,7 +5,7 @@ import com.sinaglife.shoping_cart.shared.domain.Guard
 data class CartItemPrimitives(
     val id: String,
     val quantity: Int,
-    val price: Int,
+    val price: Double,
 )
 
 class CartItem private constructor(

@@ -11,7 +11,7 @@ data class GetCartResponseItemImg(
 data class GetCartResponseItem(
     val id: String,
     val quantity: Int,
-    val price: Int,
+    val price: Double,
     val name: String,
     val stock: Int,
     val code: Int,
@@ -21,9 +21,9 @@ data class GetCartResponseItem(
 data class GetCartResponse(
     val id: String,
     val items: List<GetCartResponseItem>,
-    val subTotal: Int,
-    val total: Int,
-    val discount: Int?,
+    val subTotal: Double,
+    val total: Double,
+    val discount: Double?,
     val updatedAt: LocalDateTime,
     val customerId: String?,
 ) {
